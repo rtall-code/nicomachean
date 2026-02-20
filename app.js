@@ -354,7 +354,13 @@ function startDialogue(topicId, startNode) {
     currentTopic = topicId;
     const topic = topics.find(t => t.id === topicId);
     dialogueHeaderTitle.textContent = topic.title;
+    // Start with card hidden, then fade in
+    const card = $('dialogueCard');
+    card.classList.add('entering');
     showScreen(dialogueScreen);
+    requestAnimationFrame(() => {
+        card.classList.remove('entering');
+    });
     renderNode(startNode);
 }
 
