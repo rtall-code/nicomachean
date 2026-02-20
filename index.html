@@ -508,6 +508,14 @@
             color: var(--accent); font-weight: 600; font-size: 0.875rem;
             flex-shrink: 0; width: 1.25rem;
         }
+        .readings-list { list-style: none; padding: 0; }
+        .readings-list li {
+            padding: 0.5rem 0; border-bottom: 1px solid var(--border);
+            font-size: 0.9375rem; line-height: 1.6;
+        }
+        .readings-list li:last-child { border-bottom: none; }
+        .readings-list li strong { color: var(--text); }
+        .readings-list li em { color: var(--accent); }
 
         /* Animations */
         @keyframes fadeInUp {

@@ -390,7 +390,10 @@ async function renderNode(nodeId) {
     isTyping = false;
     skipHint.classList.remove('visible');
 
-    if (node.isEnd) {
+    if (node.isDeepEnd) {
+        await sleep(300);
+        showDeepEnd(node);
+    } else if (node.isEnd) {
         await sleep(300);
         showTopicEnd(node);
     } else {
@@ -503,9 +506,15 @@ function showTopicEnd(node) {
             <button class="btn-ghost" onclick="openReaderAtChapter(${topic.readRef.book}, ${topic.readRef.chapter})">Read the Text &rarr;</button>
     ` : '';
 
+    const tree = topicDialogues[currentTopic];
+    const deepBtn = tree && tree.deep_start ? `
+            <button class="btn-primary" onclick="startDeepDialogue()">Go Deeper</button>
+    ` : '';
+
     const btns = `
         <div style="display: flex; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap;">
-            <button class="btn-primary" onclick="setMode('instruction')">Back to Topics</button>
+            ${deepBtn}
+            <button class="${tree && tree.deep_start ? 'btn-ghost' : 'btn-primary'}" onclick="setMode('instruction')">Back to Topics</button>
             <button class="btn-ghost" onclick="openTopicQuestions(currentTopic)">Try Another Question</button>
             ${readBtn}
         </div>
@@ -523,6 +532,53 @@ function showTopicEnd(node) {
     });
 }
 
+
+function startDeepDialogue() {
+    const card = $('dialogueCard');
+    card.classList.add('exiting');
+    setTimeout(() => {
+        card.classList.remove('exiting');
+        card.classList.add('entering');
+        requestAnimationFrame(() => card.classList.remove('entering'));
+        setTimeout(() => renderNode('deep_start'), 450);
+    }, 400);
+}
+
+function showDeepEnd(node) {
+    const topic = topics.find(t => t.id === currentTopic);
+
+    const readingsHTML = node.readings && node.readings.length ? `
+        <div class="summary-card">
+            <h3>Further Reading</h3>
+            <ul class="readings-list">
+                ${node.readings.map(r => `<li><strong>${r.author}</strong>, <em>${r.title}</em>${r.year ? ` (${r.year})` : ''}</li>`).join('')}
+            </ul>
+        </div>
+    ` : '';
+
+    const readBtn = topic && topic.readRef ? `
+            <button class="btn-ghost" onclick="openReaderAtChapter(${topic.readRef.book}, ${topic.readRef.chapter})">Read the Text &rarr;</button>
+    ` : '';
+
+    const btns = `
+        <div style="display: flex; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap;">
+            <button class="btn-primary" onclick="setMode('instruction')">Back to Topics</button>
+            <button class="btn-ghost" onclick="openTopicQuestions(currentTopic)">Try Another Question</button>
+            ${readBtn}
+        </div>
+    `;
+
+    const container = document.createElement('div');
+    container.innerHTML = readingsHTML + btns;
+    container.style.opacity = '0';
+    container.style.transform = 'translateY(12px)';
+    container.style.transition = 'opacity 600ms ease, transform 600ms ease';
+    choicesContainer.appendChild(container);
+    requestAnimationFrame(() => {
+        container.style.opacity = '1';
+        container.style.transform = 'translateY(0)';
+    });
+}
 
 // ─── Event Listeners ─────────────────────────────────────
 $('beginBtn').addEventListener('click', () => setMode(currentMode));
@@ -549,8 +605,8 @@ document.addEventListener('click', (e) => {
 });
 
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && sidebar.classList.contains('open')) {
-        toggleSidebar();
+    if (e.key === 'Escape' && isTyping) {
+        skipTyping = true;
     }
 });
 
