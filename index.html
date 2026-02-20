@@ -244,6 +244,15 @@
         }
         .dialogue-text p:last-child { margin-bottom: 0; }
 
+        .term-hl {
+            color: var(--accent); font-weight: 500;
+            animation: hlFade 600ms ease both;
+        }
+        @keyframes hlFade {
+            from { color: var(--text); font-weight: 400; }
+            to { color: var(--accent); font-weight: 500; }
+        }
+
         .typing-cursor::after {
             content: '|'; animation: blink 800ms step-end infinite;
             color: var(--accent); margin-left: 1px;

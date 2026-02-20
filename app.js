@@ -402,22 +402,29 @@ async function renderNode(nodeId) {
     }
 }
 
-async function typeText(element, text) {
+async function typeText(element, rawText) {
+    // Strip *highlight* markers for typing, apply them after
+    const cleanText = rawText.replace(/\*([^*]+)\*/g, '$1');
     element.textContent = '';
     element.classList.add('typing-cursor');
-    for (let i = 0; i < text.length; i++) {
+    for (let i = 0; i < cleanText.length; i++) {
         if (skipTyping) {
-            element.textContent = text;
+            element.textContent = cleanText;
             break;
         }
-        element.textContent += text[i];
+        element.textContent += cleanText[i];
         let delay = 12 + Math.random() * 6;
-        if ('.!?'.includes(text[i]) && i < text.length - 1) delay += 84;
-        else if (',;:'.includes(text[i])) delay += 42;
-        else if (text[i] === '\u2014') delay += 56;
+        if ('.!?'.includes(cleanText[i]) && i < cleanText.length - 1) delay += 84;
+        else if (',;:'.includes(cleanText[i])) delay += 42;
+        else if (cleanText[i] === '\u2014') delay += 56;
         await sleep(delay);
     }
     element.classList.remove('typing-cursor');
+    // Apply highlights with fade-in
+    if (rawText.includes('*')) {
+        const escaped = rawText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        element.innerHTML = escaped.replace(/\*([^*]+)\*/g, '<span class="term-hl">$1</span>');
+    }
 }
 
 function showChoices(choices) {
