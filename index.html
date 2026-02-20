@@ -245,12 +245,13 @@
         .dialogue-text p:last-child { margin-bottom: 0; }
 
         .term-hl {
-            color: var(--accent); font-weight: 500;
+            background: linear-gradient(to top, rgba(160,82,45,0.18) 0%, rgba(160,82,45,0.18) 60%, transparent 60%);
+            padding: 0 2px; border-radius: 2px;
             animation: hlFade 600ms ease both;
         }
         @keyframes hlFade {
-            from { color: var(--text); font-weight: 400; }
-            to { color: var(--accent); font-weight: 500; }
+            from { background: transparent; }
+            to { background: linear-gradient(to top, rgba(160,82,45,0.18) 0%, rgba(160,82,45,0.18) 60%, transparent 60%); }
         }
 
         .typing-cursor::after {
