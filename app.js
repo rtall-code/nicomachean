@@ -10,6 +10,7 @@ let displayedTopicIds = [];     // currently shown 4 topic ids
 // Reader state
 let readerBook = null;
 let readerChapter = 0;
+let readerFromTopic = false;
 let searchMatches = [];
 let searchMatchIndex = -1;
 
@@ -198,6 +199,7 @@ function openTopicQuestions(topicId) {
 function openReader(bookId) {
     readerBook = bookId;
     readerChapter = 0;
+    readerFromTopic = false;
     const book = books.find(b => b.id === bookId);
     const data = sourceText[bookId];
     if (!data) return;
@@ -328,7 +330,7 @@ $('searchNextBtn').addEventListener('click', () => {
     scrollToMatch((searchMatchIndex + 1) % searchMatches.length);
 });
 
-$('readerBackBtn').addEventListener('click', () => setMode('navigation'));
+$('readerBackBtn').addEventListener('click', () => setMode(readerFromTopic ? 'instruction' : 'navigation'));
 
 $('prevChapterBtn').addEventListener('click', () => {
     if (readerChapter > 0) loadChapter(readerChapter - 1);
@@ -448,10 +450,40 @@ async function selectChoice(choice, clickedBtn) {
     card.classList.remove('entering');
 }
 
+function openReaderAtChapter(bookId, chapterNum) {
+    readerFromTopic = true;
+    readerBook = bookId;
+    const book = books.find(b => b.id === bookId);
+    const data = sourceText[bookId];
+    if (!data || !book) return;
+
+    // Find chapter index by chapter number
+    const chapterIndex = data.chapters.findIndex(ch => ch.chapter === chapterNum);
+    if (chapterIndex === -1) return;
+
+    readerChapter = chapterIndex;
+    readerHeaderTitle.textContent = `Book ${book.numeral}: ${book.title}`;
+
+    chapterNav.innerHTML = '';
+    data.chapters.forEach((ch, i) => {
+        const pill = document.createElement('button');
+        pill.className = 'chapter-pill' + (i === chapterIndex ? ' active' : '');
+        pill.textContent = `Ch. ${ch.numeral}`;
+        pill.addEventListener('click', () => loadChapter(i));
+        chapterNav.appendChild(pill);
+    });
+
+    loadChapter(chapterIndex);
+    showScreen(readerScreen);
+    clearSearch();
+}
+
 function showTopicEnd(node) {
     completedTopics.add(currentTopic);
     saveState();
     updateProgress();
+
+    const topic = topics.find(t => t.id === currentTopic);
 
     const summaryHTML = `
         <div class="summary-card">
@@ -467,10 +499,15 @@ function showTopicEnd(node) {
         </div>
     ` : '';
 
+    const readBtn = topic && topic.readRef ? `
+            <button class="btn-ghost" onclick="openReaderAtChapter(${topic.readRef.book}, ${topic.readRef.chapter})">Read the Text &rarr;</button>
+    ` : '';
+
     const btns = `
         <div style="display: flex; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap;">
             <button class="btn-primary" onclick="setMode('instruction')">Back to Topics</button>
             <button class="btn-ghost" onclick="openTopicQuestions(currentTopic)">Try Another Question</button>
+            ${readBtn}
         </div>
     `;
 

@@ -4,6 +4,7 @@ const topics = [
         id: 'happiness',
         title: 'What is Happiness?',
         subtitle: 'Eudaimonia and the highest good',
+        readRef: { book: 1, chapter: 7 },
         questions: [
             { text: "Is happiness the same as pleasure?", next: 'q_pleasure' },
             { text: "Can happiness be taken away by misfortune?", next: 'q_fortune' },
@@ -14,6 +15,7 @@ const topics = [
         id: 'function',
         title: 'The Human Function',
         subtitle: 'What makes us distinctly human',
+        readRef: { book: 1, chapter: 7 },
         questions: [
             { text: "Do human beings have a purpose?", next: 'q_purpose' },
             { text: "Is reason what defines us?", next: 'q_reason' },
@@ -24,6 +26,7 @@ const topics = [
         id: 'virtue',
         title: 'Virtue & Character',
         subtitle: 'How we become good people',
+        readRef: { book: 2, chapter: 1 },
         questions: [
             { text: "Are we born good or do we become good?", next: 'q_born' },
             { text: "Can you teach someone to be virtuous?", next: 'q_teach' },
@@ -34,6 +37,7 @@ const topics = [
         id: 'mean',
         title: 'The Golden Mean',
         subtitle: 'Virtue as balance between extremes',
+        readRef: { book: 2, chapter: 6 },
         questions: [
             { text: "Is virtue always in the middle?", next: 'q_always_middle' },
             { text: "How do I find the right balance?", next: 'q_find_balance' },
@@ -44,6 +48,7 @@ const topics = [
         id: 'courage',
         title: 'Courage',
         subtitle: 'The nature of true bravery',
+        readRef: { book: 3, chapter: 7 },
         questions: [
             { text: "Is courage just the absence of fear?", next: 'q_no_fear' },
             { text: "Can you be too brave?", next: 'q_too_brave' },
@@ -54,6 +59,7 @@ const topics = [
         id: 'temperance',
         title: 'Temperance',
         subtitle: 'Mastering desire and pleasure',
+        readRef: { book: 3, chapter: 12 },
         questions: [
             { text: "Should we avoid pleasure?", next: 'q_avoid' },
             { text: "What is the difference between temperance and self-denial?", next: 'q_denial' },
@@ -64,6 +70,7 @@ const topics = [
         id: 'generosity',
         title: 'Generosity',
         subtitle: 'The art of giving well',
+        readRef: { book: 4, chapter: 1 },
         questions: [
             { text: "Can you be too generous?", next: 'q_too_generous' },
             { text: "Is generosity about money?", next: 'q_money' },
@@ -74,6 +81,7 @@ const topics = [
         id: 'magnanimity',
         title: 'Magnanimity & Pride',
         subtitle: 'Greatness of soul',
+        readRef: { book: 4, chapter: 3 },
         questions: [
             { text: "Is pride a virtue or a vice?", next: 'q_pride' },
             { text: "What does a truly great-souled person look like?", next: 'q_great_soul' },
@@ -84,6 +92,7 @@ const topics = [
         id: 'justice',
         title: 'Justice',
         subtitle: 'What we owe each other',
+        readRef: { book: 5, chapter: 10 },
         questions: [
             { text: "Is justice about equality?", next: 'q_equality' },
             { text: "What is the difference between fairness and justice?", next: 'q_fairness' },
@@ -94,6 +103,7 @@ const topics = [
         id: 'phronesis',
         title: 'Practical Wisdom',
         subtitle: 'The skill of living well',
+        readRef: { book: 6, chapter: 12 },
         questions: [
             { text: "Is practical wisdom the same as being clever?", next: 'q_clever' },
             { text: "Can you have virtue without practical wisdom?", next: 'q_without' },
@@ -104,6 +114,7 @@ const topics = [
         id: 'akrasia',
         title: 'Weakness of Will',
         subtitle: 'Why we fail to do what we know is right',
+        readRef: { book: 7, chapter: 1 },
         questions: [
             { text: "If I know what\u2019s right, why don\u2019t I do it?", next: 'q_why_fail' },
             { text: "Is weakness of will the same as vice?", next: 'q_vs_vice' },
@@ -114,6 +125,7 @@ const topics = [
         id: 'friendship',
         title: 'Friendship',
         subtitle: 'Why we need others to flourish',
+        readRef: { book: 8, chapter: 1 },
         questions: [
             { text: "What makes a true friend?", next: 'q_true_friend' },
             { text: "Can friendships based on usefulness be real?", next: 'q_utility' },
@@ -124,6 +136,7 @@ const topics = [
         id: 'selflove',
         title: 'Self-Love',
         subtitle: 'Is loving yourself a vice or a virtue?',
+        readRef: { book: 9, chapter: 8 },
         questions: [
             { text: "Isn\u2019t self-love just selfishness?", next: 'q_selfish' },
             { text: "How is self-love connected to friendship?", next: 'q_connected' },
@@ -134,6 +147,7 @@ const topics = [
         id: 'pleasure',
         title: 'Pleasure',
         subtitle: 'Its role in the good life',
+        readRef: { book: 10, chapter: 4 },
         questions: [
             { text: "Is pleasure good or bad?", next: 'q_good_bad' },
             { text: "Are all pleasures equal?", next: 'q_equal' },
@@ -144,6 +158,7 @@ const topics = [
         id: 'contemplation',
         title: 'The Contemplative Life',
         subtitle: 'Is thinking the highest activity?',
+        readRef: { book: 10, chapter: 7 },
         questions: [
             { text: "Why does Aristotle value contemplation so highly?", next: 'q_why_value' },
             { text: "Is the contemplative life realistic?", next: 'q_realistic' },
@@ -154,6 +169,7 @@ const topics = [
         id: 'politics',
         title: 'Ethics & Politics',
         subtitle: 'Why personal virtue needs good laws',
+        readRef: { book: 10, chapter: 8 },
         questions: [
             { text: "Why can\u2019t I just be good on my own?", next: 'q_own' },
             { text: "What does ethics have to do with politics?", next: 'q_connection' },
