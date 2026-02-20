@@ -1,15 +1,16 @@
 // ─── State ───────────────────────────────────────────────
 let currentMode = 'navigation'; // 'navigation' or 'instruction'
-let currentBook = null;
+let currentTopic = null;        // topic id for Learn mode
 let currentNode = null;
-let completedBooks = new Set();
+let completedTopics = new Set();
 let unlockedConcepts = new Set();
 let isTyping = false;
 let skipTyping = false;
+let displayedTopicIds = [];     // currently shown 4 topic ids
 
 // Reader state
 let readerBook = null;
-let readerChapter = 0; // index into chapters array
+let readerChapter = 0;
 let searchMatches = [];
 let searchMatchIndex = -1;
 
@@ -17,6 +18,7 @@ let searchMatchIndex = -1;
 const $ = id => document.getElementById(id);
 const introScreen = $('introScreen');
 const hubScreen = $('hubScreen');
+const questionScreen = $('questionScreen');
 const dialogueScreen = $('dialogueScreen');
 const readerScreen = $('readerScreen');
 const endScreen = $('endScreen');
@@ -40,12 +42,21 @@ const searchCount = $('searchCount');
 // ─── Utility ─────────────────────────────────────────────
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
 function loadState() {
     try {
-        const saved = localStorage.getItem('nicomachean_state');
+        const saved = localStorage.getItem('nicomachean_state_v2');
         if (saved) {
             const data = JSON.parse(saved);
-            completedBooks = new Set(data.completedBooks || []);
+            completedTopics = new Set(data.completedTopics || []);
             unlockedConcepts = new Set(data.unlockedConcepts || []);
             if (data.currentMode) currentMode = data.currentMode;
         }
@@ -54,8 +65,8 @@ function loadState() {
 
 function saveState() {
     try {
-        localStorage.setItem('nicomachean_state', JSON.stringify({
-            completedBooks: [...completedBooks],
+        localStorage.setItem('nicomachean_state_v2', JSON.stringify({
+            completedTopics: [...completedTopics],
             unlockedConcepts: [...unlockedConcepts],
             currentMode
         }));
@@ -63,7 +74,7 @@ function saveState() {
 }
 
 // ─── Screens ─────────────────────────────────────────────
-const allScreens = () => [introScreen, hubScreen, dialogueScreen, readerScreen, endScreen];
+const allScreens = () => [introScreen, hubScreen, questionScreen, dialogueScreen, readerScreen, endScreen];
 
 function showScreen(screen) {
     allScreens().forEach(s => s.classList.add('hidden'));
@@ -72,10 +83,10 @@ function showScreen(screen) {
 }
 
 function updateProgress() {
-    const pct = (completedBooks.size / 10) * 100;
+    const pct = (completedTopics.size / topics.length) * 100;
     progressFill.style.width = pct + '%';
     const count = $('completedCount');
-    if (count) count.textContent = completedBooks.size;
+    if (count) count.textContent = completedTopics.size;
 }
 
 // ─── Mode Switching ──────────────────────────────────────
@@ -87,53 +98,102 @@ function setMode(mode) {
 
     const hubProgress = $('hubProgress');
     const hubSubtitle = $('hubSubtitle');
+    const bookList = $('bookList');
+    const topicSection = $('topicSection');
 
     if (mode === 'instruction') {
         hubProgress.style.display = '';
-        hubSubtitle.textContent = 'Choose a book to explore with Aristotle';
+        hubSubtitle.textContent = 'Choose a topic to explore with Aristotle';
+        bookList.style.display = 'none';
+        topicSection.style.display = '';
+        renderTopicGrid();
     } else {
         hubProgress.style.display = 'none';
         hubSubtitle.textContent = 'Choose a book to read';
+        bookList.style.display = '';
+        topicSection.style.display = 'none';
+        renderBookList();
     }
 
-    renderHub();
+    updateProgress();
+    showScreen(hubScreen);
     saveState();
 }
 
-// ─── Hub ─────────────────────────────────────────────────
-function renderHub() {
+// ─── Hub: Book List (Read mode) ──────────────────────────
+function renderBookList() {
     const list = $('bookList');
     list.innerHTML = '';
     books.forEach(book => {
-        const done = completedBooks.has(book.id);
         const item = document.createElement('div');
-        item.className = 'book-item' + (done && currentMode === 'instruction' ? ' completed' : '');
-
-        const statusText = currentMode === 'instruction'
-            ? (done ? '<span class="check">Completed</span>' : 'Explore &rarr;')
-            : 'Read &rarr;';
-
-        const numeralClass = done && currentMode === 'instruction' ? 'book-numeral' : 'book-numeral';
-
+        item.className = 'book-item';
         item.innerHTML = `
-            <div class="${numeralClass}">${done && currentMode === 'instruction' ? '&#10003;' : book.numeral}</div>
+            <div class="book-numeral">${book.numeral}</div>
             <div class="book-info">
                 <div class="book-title">${book.title}</div>
                 <div class="book-desc">${book.desc}</div>
             </div>
-            <div class="book-status">${statusText}</div>
+            <div class="book-status">Read &rarr;</div>
         `;
-        item.addEventListener('click', () => {
-            if (currentMode === 'instruction') {
-                startBook(book.id);
-            } else {
-                openReader(book.id);
-            }
-        });
+        item.addEventListener('click', () => openReader(book.id));
         list.appendChild(item);
     });
-    updateProgress();
-    showScreen(hubScreen);
+}
+
+// ─── Hub: Topic Grid (Learn mode) ────────────────────────
+function pickFourTopics() {
+    // Pick 4 random topics, preferring ones not yet completed
+    const incomplete = topics.filter(t => !completedTopics.has(t.id));
+    const pool = incomplete.length >= 4 ? incomplete : topics;
+    const shuffled = shuffle(pool);
+    displayedTopicIds = shuffled.slice(0, 4).map(t => t.id);
+}
+
+function renderTopicGrid() {
+    if (displayedTopicIds.length === 0) pickFourTopics();
+
+    const grid = $('topicGrid');
+    grid.innerHTML = '';
+    displayedTopicIds.forEach(id => {
+        const topic = topics.find(t => t.id === id);
+        if (!topic) return;
+        const done = completedTopics.has(topic.id);
+        const card = document.createElement('div');
+        card.className = 'topic-card' + (done ? ' completed' : '');
+        card.innerHTML = `
+            <div class="topic-card-title">${topic.title}</div>
+            <div class="topic-card-subtitle">${topic.subtitle}</div>
+        `;
+        card.addEventListener('click', () => openTopicQuestions(topic.id));
+        grid.appendChild(card);
+    });
+}
+
+function shuffleTopics() {
+    pickFourTopics();
+    renderTopicGrid();
+}
+
+// ─── Question Selection Screen ───────────────────────────
+function openTopicQuestions(topicId) {
+    currentTopic = topicId;
+    const topic = topics.find(t => t.id === topicId);
+    if (!topic) return;
+
+    $('questionTopicTitle').textContent = topic.title;
+    $('questionTopicSubtitle').textContent = topic.subtitle;
+
+    const list = $('questionList');
+    list.innerHTML = '';
+    topic.questions.forEach(q => {
+        const btn = document.createElement('button');
+        btn.className = 'question-btn';
+        btn.textContent = q.text;
+        btn.addEventListener('click', () => startDialogue(topicId, q.next));
+        list.appendChild(btn);
+    });
+
+    showScreen(questionScreen);
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -149,7 +209,6 @@ function openReader(bookId) {
 
     readerHeaderTitle.textContent = `Book ${book.numeral}: ${book.title}`;
 
-    // Build chapter pills
     chapterNav.innerHTML = '';
     data.chapters.forEach((ch, i) => {
         const pill = document.createElement('button');
@@ -171,14 +230,12 @@ function loadChapter(index) {
     readerChapter = index;
     const ch = data.chapters[index];
 
-    // Update active pill
     chapterNav.querySelectorAll('.chapter-pill').forEach((pill, i) => {
         pill.classList.toggle('active', i === index);
     });
 
     readerChapterTitle.textContent = `Chapter ${ch.numeral}`;
 
-    // Render paragraphs
     readerContent.innerHTML = '';
     ch.paragraphs.forEach((text, pi) => {
         const p = document.createElement('p');
@@ -188,11 +245,9 @@ function loadChapter(index) {
         readerContent.appendChild(p);
     });
 
-    // Update prev/next buttons
     $('prevChapterBtn').style.visibility = index > 0 ? 'visible' : 'hidden';
     $('nextChapterBtn').style.visibility = index < data.chapters.length - 1 ? 'visible' : 'hidden';
 
-    // Re-apply search if active
     if (readerSearchInput.value.trim()) {
         applySearch(readerSearchInput.value.trim());
     }
@@ -206,10 +261,8 @@ function clearSearch() {
     searchCount.textContent = '';
     searchMatches = [];
     searchMatchIndex = -1;
-    // Remove highlights
     readerContent.querySelectorAll('.reader-paragraph').forEach(p => {
         p.classList.remove('highlighted');
-        // Restore text without marks
         if (p.querySelector('mark')) {
             p.textContent = p.textContent;
         }
@@ -219,7 +272,6 @@ function clearSearch() {
 function applySearch(query) {
     searchMatches = [];
     searchMatchIndex = -1;
-
     const paragraphs = readerContent.querySelectorAll('.reader-paragraph');
     const lowerQuery = query.toLowerCase();
 
@@ -230,7 +282,6 @@ function applySearch(query) {
 
         if (lowerText.includes(lowerQuery)) {
             searchMatches.push(i);
-            // Highlight matches with <mark>
             const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
             p.innerHTML = text.replace(regex, '<mark>$1</mark>');
             p.classList.add('highlighted');
@@ -255,40 +306,34 @@ function scrollToMatch(index) {
     searchMatchIndex = index;
     const pi = searchMatches[index];
     const el = readerContent.querySelectorAll('.reader-paragraph')[pi];
-    if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function escapeRegex(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// Reader event listeners
 readerSearchInput.addEventListener('input', () => {
     const q = readerSearchInput.value.trim();
     if (q.length >= 2) {
         applySearch(q);
     } else {
         clearSearch();
-        // Keep the input value if user is still typing
         if (q.length > 0) readerSearchInput.value = q;
     }
 });
 
 $('searchPrevBtn').addEventListener('click', () => {
     if (searchMatches.length === 0) return;
-    const next = (searchMatchIndex - 1 + searchMatches.length) % searchMatches.length;
-    scrollToMatch(next);
+    scrollToMatch((searchMatchIndex - 1 + searchMatches.length) % searchMatches.length);
 });
 
 $('searchNextBtn').addEventListener('click', () => {
     if (searchMatches.length === 0) return;
-    const next = (searchMatchIndex + 1) % searchMatches.length;
-    scrollToMatch(next);
+    scrollToMatch((searchMatchIndex + 1) % searchMatches.length);
 });
 
-$('readerBackBtn').addEventListener('click', () => renderHub());
+$('readerBackBtn').addEventListener('click', () => setMode('navigation'));
 
 $('prevChapterBtn').addEventListener('click', () => {
     if (readerChapter > 0) loadChapter(readerChapter - 1);
@@ -302,30 +347,22 @@ $('nextChapterBtn').addEventListener('click', () => {
 });
 
 // ═══════════════════════════════════════════════════════════
-// INSTRUCTION MODE (Socratic Dialogue)
+// LEARN MODE (Topic-based Socratic Dialogue)
 // ═══════════════════════════════════════════════════════════
 
-function startBook(bookId) {
-    currentBook = bookId;
-    const book = books.find(b => b.id === bookId);
-    dialogueHeaderTitle.textContent = `Book ${book.numeral}: ${book.title}`;
+function startDialogue(topicId, startNode) {
+    currentTopic = topicId;
+    const topic = topics.find(t => t.id === topicId);
+    dialogueHeaderTitle.textContent = topic.title;
     showScreen(dialogueScreen);
-    renderNode('start');
+    renderNode(startNode);
 }
 
 async function renderNode(nodeId) {
     currentNode = nodeId;
-    const tree = dialogueTrees[currentBook];
+    const tree = topicDialogues[currentTopic];
     const node = tree[nodeId];
     if (!node) return;
-
-    // Unlock concepts
-    if (node.concepts) {
-        node.concepts.forEach(c => unlockedConcepts.add(c));
-        unlockedConcepts.add('b' + currentBook);
-        updateConceptMap();
-        saveState();
-    }
 
     // Clear
     dialogueText.innerHTML = '';
@@ -334,7 +371,6 @@ async function renderNode(nodeId) {
     skipTyping = false;
     isTyping = true;
 
-    // Show skip hint after a short delay
     setTimeout(() => {
         if (isTyping) skipHint.classList.add('visible');
     }, 1500);
@@ -350,10 +386,9 @@ async function renderNode(nodeId) {
     isTyping = false;
     skipHint.classList.remove('visible');
 
-    // Show end or choices
     if (node.isEnd) {
         await sleep(300);
-        showBookEnd(node);
+        showTopicEnd(node);
     } else {
         await sleep(200);
         showChoices(node.choices);
@@ -411,11 +446,10 @@ async function selectChoice(choice, clickedBtn) {
     card.classList.remove('entering');
 }
 
-function showBookEnd(node) {
-    completedBooks.add(currentBook);
-    conceptMapNodes.filter(n => n.book === currentBook).forEach(n => unlockedConcepts.add(n.id));
-    updateConceptMap();
+function showTopicEnd(node) {
+    completedTopics.add(currentTopic);
     saveState();
+    updateProgress();
 
     const summaryHTML = `
         <div class="summary-card">
@@ -433,12 +467,12 @@ function showBookEnd(node) {
 
     const btns = `
         <div style="display: flex; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap;">
-            <button class="btn-primary" onclick="renderHub()">Back to Books</button>
+            <button class="btn-primary" onclick="setMode('instruction')">Back to Topics</button>
             <button class="btn-outline" onclick="toggleSidebar()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                 Concept Map
             </button>
-            <button class="btn-ghost" onclick="restartBook()">Revisit This Book</button>
+            <button class="btn-ghost" onclick="openTopicQuestions(currentTopic)">Try Another Question</button>
         </div>
     `;
 
@@ -452,10 +486,6 @@ function showBookEnd(node) {
         container.style.opacity = '1';
         container.style.transform = 'translateY(0)';
     });
-}
-
-function restartBook() {
-    if (currentBook) startBook(currentBook);
 }
 
 // ─── Concept Map ─────────────────────────────────────────
@@ -523,10 +553,12 @@ function toggleSidebar() {
 
 // ─── Event Listeners ─────────────────────────────────────
 $('beginBtn').addEventListener('click', () => setMode(currentMode));
-$('backBtn').addEventListener('click', () => renderHub());
+$('backBtn').addEventListener('click', () => setMode('instruction'));
+$('questionBackBtn').addEventListener('click', () => setMode('instruction'));
 $('mapBtn').addEventListener('click', toggleSidebar);
 $('closeMapBtn').addEventListener('click', toggleSidebar);
 $('overlay').addEventListener('click', toggleSidebar);
+$('shuffleBtn').addEventListener('click', shuffleTopics);
 
 // Mode switcher
 $('modeNavBtn').addEventListener('click', () => setMode('navigation'));
@@ -546,7 +578,6 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && sidebar.classList.contains('open')) {
         toggleSidebar();
@@ -563,7 +594,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === currentMode);
 });
 
-// If already visited, skip intro and go to hub
-if (completedBooks.size > 0) {
+// If already visited, skip intro
+if (completedTopics.size > 0) {
     setMode(currentMode);
 }

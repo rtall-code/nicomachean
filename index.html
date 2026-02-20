@@ -376,6 +376,92 @@
         }
         .reader-footer .btn-outline { min-width: 120px; justify-content: center; }
 
+        /* ─── Topic Grid (Learn mode) ─── */
+        .topic-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .topic-card {
+            padding: 1.5rem; border-radius: var(--radius-md);
+            background: var(--card); border: 1px solid var(--border);
+            cursor: pointer; transition: all var(--transition);
+            display: flex; flex-direction: column; gap: 0.375rem;
+            min-height: 100px;
+        }
+        .topic-card:hover {
+            border-color: var(--accent); box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .topic-card.completed { border-color: var(--accent-light); }
+        .topic-card.completed::after {
+            content: '\2713'; position: absolute; top: 0.75rem; right: 0.75rem;
+            color: var(--accent); font-size: 0.875rem; font-weight: 600;
+        }
+        .topic-card { position: relative; }
+        .topic-card-title {
+            font-family: var(--font-serif); font-size: 1.125rem;
+            font-weight: 500; color: var(--text);
+        }
+        .topic-card-subtitle {
+            font-size: 0.8125rem; color: var(--text-secondary);
+            line-height: 1.4;
+        }
+        .shuffle-wrap {
+            text-align: center; margin-bottom: 1.5rem;
+        }
+        .btn-shuffle {
+            font-family: var(--font-sans); font-size: 0.8125rem; font-weight: 500;
+            background: transparent; color: var(--text-secondary);
+            border: 1px solid var(--border); padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-sm); cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex; align-items: center; gap: 0.375rem;
+        }
+        .btn-shuffle:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ─── Question Selection Screen ─── */
+        #questionScreen { padding-top: 4rem; }
+        .question-header {
+            position: fixed; top: 3px; left: 0; right: 0;
+            background: rgba(250, 248, 245, 0.92); backdrop-filter: blur(12px);
+            padding: 0.75rem 1.5rem; display: flex;
+            align-items: center; z-index: 50;
+            border-bottom: 1px solid var(--border);
+        }
+        .question-area {
+            max-width: 560px; width: 100%; margin: 0 auto;
+            padding: 2rem 0;
+        }
+        .question-topic-title {
+            font-family: var(--font-serif); font-size: 1.75rem;
+            font-weight: 500; margin-bottom: 0.375rem; text-align: center;
+        }
+        .question-topic-subtitle {
+            font-size: 0.9375rem; color: var(--text-secondary);
+            text-align: center; margin-bottom: 2rem;
+        }
+        .question-prompt {
+            font-family: var(--font-serif); font-size: 1.125rem;
+            color: var(--text-secondary); text-align: center;
+            margin-bottom: 1.25rem;
+        }
+        .question-list { display: flex; flex-direction: column; gap: 0.625rem; }
+        .question-btn {
+            font-family: var(--font-serif); font-size: 1.0625rem;
+            text-align: left; padding: 1rem 1.25rem;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--radius-md); cursor: pointer;
+            transition: all var(--transition); color: var(--text);
+            line-height: 1.5;
+        }
+        .question-btn:hover {
+            border-color: var(--accent); background: var(--accent-light);
+        }
+
+        @media (max-width: 768px) {
+            .topic-grid { grid-template-columns: 1fr; }
+        }
+
         /* ─── Sidebar ─── */
         .sidebar {
             position: fixed; top: 0; right: 0;
@@ -543,9 +629,33 @@
                 <button class="mode-btn" data-mode="instruction" id="modeInsBtn">Learn</button>
             </div>
             <div class="hub-progress" id="hubProgress" style="display:none">
-                <span id="completedCount">0</span> of 10 books completed
+                <span id="completedCount">0</span> of 16 topics completed
             </div>
+            <!-- Read mode: book list -->
             <div class="book-list" id="bookList"></div>
+            <!-- Learn mode: topic grid + shuffle -->
+            <div id="topicSection" style="display:none">
+                <div class="topic-grid" id="topicGrid"></div>
+                <div class="shuffle-wrap">
+                    <button class="btn-shuffle" id="shuffleBtn">&#x21BB; Show other topics</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Topic grid (Learn mode hub, inserted dynamically) -->
+    <!-- kept in hub via JS -->
+
+    <!-- Question selection screen (Learn mode) -->
+    <div class="screen hidden" id="questionScreen">
+        <header class="question-header">
+            <button class="btn-ghost" id="questionBackBtn">&larr; Topics</button>
+        </header>
+        <div class="question-area">
+            <h2 class="question-topic-title" id="questionTopicTitle"></h2>
+            <p class="question-topic-subtitle" id="questionTopicSubtitle"></p>
+            <p class="question-prompt">Choose a question to explore with Aristotle:</p>
+            <div class="question-list" id="questionList"></div>
         </div>
     </div>
 
@@ -634,7 +744,7 @@
 
     <!-- Data scripts -->
     <script src="source-data.js"></script>
-    <script src="dialogues.js"></script>
+    <script src="topics.js"></script>
 
     <!-- App logic -->
     <script src="app.js"></script>
