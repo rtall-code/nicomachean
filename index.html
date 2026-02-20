@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Nicomachean Ethics — A Socratic Journey</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x0391;</text></svg>">
+    <title>The Nicomachean Ethics — An Interactive Journey</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='60' font-family='serif'>NE</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -245,13 +245,13 @@
         .dialogue-text p:last-child { margin-bottom: 0; }
 
         .term-hl {
-            background: linear-gradient(to top, rgba(160,82,45,0.18) 0%, rgba(160,82,45,0.18) 60%, transparent 60%);
-            padding: 0 2px; border-radius: 2px;
+            background: rgba(160,82,45,0.15);
+            padding: 2px 5px; border-radius: 3px;
             animation: hlFade 600ms ease both;
         }
         @keyframes hlFade {
             from { background: transparent; }
-            to { background: linear-gradient(to top, rgba(160,82,45,0.18) 0%, rgba(160,82,45,0.18) 60%, transparent 60%); }
+            to { background: rgba(160,82,45,0.15); }
         }
 
         .typing-cursor::after {
@@ -348,8 +348,8 @@
         }
         .reader-paragraph mark {
             background: rgba(160, 82, 45, 0.2);
-            color: inherit; border-radius: 2px;
-            padding: 0 2px;
+            color: inherit; border-radius: 3px;
+            padding: 2px 5px;
         }
 
         /* Search bar in reader */
@@ -570,13 +570,13 @@
     <!-- Intro screen -->
     <div class="screen" id="introScreen">
         <div class="intro-content">
-            <div class="intro-decoration">&#913;</div>
+            <div class="intro-decoration">NE</div>
             <h1 class="intro-title">Nicomachean Ethics</h1>
             <p class="intro-subtitle">Explore Aristotle's Classic Text with the Help of Claude</p>
             <p class="intro-description">
                 Explore Aristotle's most influential work on ethics and the good life.
                 Read the original text with guided navigation, or learn through
-                interactive Socratic dialogue across ten books of practical wisdom.
+                interactive dialogue across ten books of practical wisdom.
             </p>
             <div class="intro-btn-wrap">
                 <button class="btn-primary" id="beginBtn">Begin the Journey</button>

@@ -186,7 +186,7 @@ const topicDialogues = {
 happiness: {
     q_pleasure: {
         text: [
-            "Many people believe so \u2014 that *happiness* is simply *pleasure*. But consider this: animals also pursue pleasure. If pleasure were the whole of happiness, the best human life would be no different from the life of grazing cattle.",
+            "Many people believe so \u2014 that happiness is simply pleasure. But consider this: animals also pursue pleasure. If pleasure were the whole of happiness, *the best human life would be no different from the life of grazing cattle*.",
             "Does that seem right to you?"
         ],
         choices: [
@@ -197,7 +197,7 @@ happiness: {
     pleasure_defense: {
         text: [
             "Nothing is wrong with pleasure in itself! I am no enemy of enjoyment. But there is a difference between saying pleasure is good and saying it is *the highest good*.",
-            "A musician takes pleasure in playing beautifully. But the pleasure follows from the *excellence* \u2014 not the other way around. Pleasure accompanies *good activity*; it does not replace it."
+            "A musician takes pleasure in playing beautifully. But *the pleasure follows from the excellence* \u2014 not the other way around. Pleasure accompanies good activity; it does not replace it."
         ],
         choices: [
             { text: "So what is happiness then?", next: 'deeper' }
@@ -205,8 +205,8 @@ happiness: {
     },
     q_fortune: {
         text: [
-            "A question that troubled me greatly. Consider: a good person who suffers terrible misfortune \u2014 the loss of children, exile, ruin \u2014 can we call them *happy*?",
-            "I do not think so. One swallow does not make a summer, and one day does not make a person happy. *Happiness* requires a *complete life*."
+            "A question that troubled me greatly. Consider: a good person who suffers terrible misfortune \u2014 the loss of children, exile, ruin \u2014 can we call them happy?",
+            "I do not think so. *One swallow does not make a summer, and one day does not make a person happy*. Happiness requires a *complete life*."
         ],
         choices: [
             { text: "So happiness depends on luck?", next: 'fortune_luck' },
@@ -216,7 +216,7 @@ happiness: {
     fortune_luck: {
         text: [
             "Not entirely. *External goods* are necessary conditions, but they are not sufficient. A wealthy fool is not happy. The foundation of happiness is *virtuous activity* \u2014 living well and doing well.",
-            "But I am honest: some minimum of good fortune is needed. We are not disembodied minds. We need friends, some resources, and reasonable circumstances."
+            "But I am honest: some minimum of good fortune is needed. *We are not disembodied minds*. We need friends, some resources, and reasonable circumstances."
         ],
         choices: [
             { text: "How do we build happiness then?", next: 'deeper' }
@@ -224,8 +224,8 @@ happiness: {
     },
     fortune_unfair: {
         text: [
-            "I understand the feeling. But notice: the truly *virtuous* person bears misfortune with dignity. They are resilient, not because they feel no pain, but because their *character* provides a stable foundation.",
-            "They will never become truly miserable, because they will never do what is hateful and base. Still, I do not call them *blessed* in the midst of great suffering. Honesty demands that much."
+            "I understand the feeling. But notice: the truly virtuous person bears misfortune with dignity. They are resilient, not because they feel no pain, but because *their character provides a stable foundation*.",
+            "*They will never become truly miserable, because they will never do what is hateful and base*. Still, I do not call them blessed in the midst of great suffering. Honesty demands that much."
         ],
         choices: [
             { text: "What is the foundation of happiness?", next: 'deeper' }
@@ -234,7 +234,7 @@ happiness: {
     q_good_life: {
         text: [
             "The most important question one can ask. Let us think about it carefully.",
-            "People pursue many things \u2014 pleasure, honour, wealth. But each of these is sought for the sake of something further. Is there something we pursue *for its own sake*, never as a means to something else?"
+            "People pursue many things \u2014 pleasure, honour, wealth. But each of these is sought for the sake of something further. Is there something we pursue *for its own sake, never as a means to something else*?"
         ],
         choices: [
             { text: "Happiness?", next: 'deeper' },
@@ -243,8 +243,8 @@ happiness: {
     },
     chain: {
         text: [
-            "If no *final end* exists, then our desires go on to infinity \u2014 each thing wanted for the sake of something else, endlessly. But that would make all desire empty and vain.",
-            "There must be some end that is *complete* and *self-sufficient* \u2014 something that, when you have it, you lack nothing. Everyone calls this happiness, though they disagree about what it is."
+            "If no final end exists, then *our desires go on to infinity* \u2014 each thing wanted for the sake of something else, endlessly. But that would make all desire empty and vain.",
+            "There must be some end that is *complete and self-sufficient* \u2014 something that, when you have it, you lack nothing. Everyone calls this happiness, though they disagree about what it is."
         ],
         choices: [
             { text: "How do we figure out what it is?", next: 'deeper' }
@@ -252,9 +252,9 @@ happiness: {
     },
     deeper: {
         text: [
-            "Here is my approach. A flute player\u2019s good lies in playing the flute well. A sculptor\u2019s good lies in sculpting well. If human beings have a distinctive *function*, then our good lies in performing that function excellently.",
-            "What is our function? Not mere life \u2014 plants have that. Not perception \u2014 animals have that. What remains is the active life of the *rational part of the soul*.",
-            "*Happiness*, then, is the activity of the soul in accordance with *virtue*, in a complete life."
+            "Here is my approach. A flute player\u2019s good lies in playing the flute well. A sculptor\u2019s good lies in sculpting well. If human beings have a distinctive function, then our good lies in performing that function excellently.",
+            "What is our function? Not mere life \u2014 plants have that. Not perception \u2014 animals have that. What remains is *the active life of the rational part of the soul*.",
+            "Happiness, then, is *activity of the soul in accordance with virtue*, in a complete life."
         ],
         choices: [
             { text: "What do you mean by \u2018activity\u2019?", next: 'activity' },
@@ -263,8 +263,8 @@ happiness: {
     },
     activity: {
         text: [
-            "This is crucial. *Happiness* is not a feeling or a possession \u2014 it is an *activity*. Just as the Olympic crown goes not to the strongest but to those who compete, the good life belongs not to those who merely possess virtue but to those who exercise it.",
-            "You cannot be happy asleep. Happiness requires action \u2014 living in a certain way, day after day, over a *complete life*."
+            "This is crucial. Happiness is not a feeling or a possession \u2014 it is an activity. *Just as the Olympic crown goes not to the strongest but to those who compete*, the good life belongs not to those who merely possess virtue but to those who exercise it.",
+            "You cannot be happy asleep. Happiness requires action \u2014 living in a certain way, *day after day, over a complete life*."
         ],
         choices: [
             { text: "Let\u2019s wrap this up", next: 'conclusion' }
@@ -272,7 +272,7 @@ happiness: {
     },
     conclusion: {
         text: [
-            "*Happiness* is the activity of the soul in accordance with *virtue*, over a complete life. It is not a fleeting feeling but the shape of a well-lived life. It requires virtue as its core, some *external goods* as conditions, and time to unfold.",
+            "Happiness is *activity of the soul in accordance with virtue*, over a complete life. It is not a fleeting feeling but *the shape of a well-lived life*. It requires virtue as its core, some external goods as conditions, and time to unfold.",
             "This is the foundation upon which everything else in ethics rests."
         ],
         isEnd: true,
@@ -287,8 +287,8 @@ happiness: {
     },
     deep_start: {
         text: [
-            "You\u2019ve grasped Aristotle\u2019s basic account of *eudaimonia*. Now let\u2019s step into one of the liveliest debates in Aristotelian scholarship: what exactly does Aristotle mean when he calls happiness *the highest good*? This question has divided interpreters for decades, and the answer has profound consequences for how we understand the good life.",
-            "The central puzzle is this. Aristotle says happiness is \u2018complete\u2019 and \u2018*self-sufficient*.\u2019 But he also says it is \u2018activity of the soul in accordance with virtue\u2019 \u2014 and in Book X, he seems to identify it specifically with philosophical *contemplation*. So is happiness one supreme activity, or is it an inclusive whole that embraces all the goods of a human life?",
+            "You\u2019ve grasped Aristotle\u2019s basic account of *eudaimonia*. Now let\u2019s step into one of the liveliest debates in Aristotelian scholarship: what exactly does Aristotle mean when he calls happiness the highest good? This question has divided interpreters for decades, and the answer has profound consequences for how we understand the good life.",
+            "The central puzzle is this. Aristotle says happiness is \u2018complete\u2019 and \u2018self-sufficient.\u2019 But he also says it is \u2018activity of the soul in accordance with virtue\u2019 \u2014 and in Book X, he seems to identify it specifically with philosophical *contemplation*. So is happiness one supreme activity, or *an inclusive whole that embraces all the goods of a human life*?",
             "Two towering figures staked out opposing positions on this question, and their debate has shaped virtually all subsequent scholarship."
         ],
         choices: [
@@ -758,8 +758,8 @@ mean: {
 courage: {
     q_no_fear: {
         text: [
-            "Not at all! A person who fears nothing is not *courageous* \u2014 they are *rash*, or perhaps simply mad. The courageous person does feel fear, but they face what must be faced because it is noble to do so.",
-            "*Courage* is not fearlessness. It is the right response to fear."
+            "Not at all! A person who fears nothing is not courageous \u2014 they are *rash*, or perhaps simply mad. The courageous person does feel fear, but *they face what must be faced because it is noble to do so*.",
+            "Courage is not fearlessness. It is *the right response to fear*."
         ],
         choices: [
             { text: "What should we fear?", next: 'what_fear' },
@@ -768,8 +768,8 @@ courage: {
     },
     q_too_brave: {
         text: [
-            "Yes! This is exactly the doctrine of *the mean* at work. *Courage* is a mean between *cowardice* (too much fear) and *rashness* (too little fear). The rash person rushes into danger without proper regard for the risk \u2014 that is not courage, it is recklessness.",
-            "True *courage* involves clear-eyed assessment of danger, combined with the resolve to face it when honour demands."
+            "Yes! This is exactly *the doctrine of the mean* at work. Courage is a mean between *cowardice* (too much fear) and *rashness* (too little fear). The rash person rushes into danger without proper regard for the risk \u2014 that is not courage, it is recklessness.",
+            "True courage involves *clear-eyed assessment of danger*, combined with the resolve to face it when honour demands."
         ],
         choices: [
             { text: "What should we be courageous about?", next: 'what_fear' },
@@ -778,8 +778,8 @@ courage: {
     },
     q_about_what: {
         text: [
-            "In the strictest sense, *courage* concerns the greatest dangers \u2014 above all, death. And the noblest form of courage faces death in battle, where the danger is greatest and the cause most honourable.",
-            "But more broadly, *courage* applies to any situation where fear might prevent you from doing what is right."
+            "In the strictest sense, courage concerns the greatest dangers \u2014 above all, death. And *the noblest form of courage faces death in battle*, where the danger is greatest and the cause most honourable.",
+            "But more broadly, courage applies to any situation where *fear might prevent you from doing what is right*."
         ],
         choices: [
             { text: "Only death in battle?", next: 'broader' },
@@ -788,8 +788,8 @@ courage: {
     },
     what_fear: {
         text: [
-            "Some fears are appropriate and even admirable. A good person fears *disgrace*, and rightly so. Not to fear disgrace would make you shameless, not courageous.",
-            "The greatest test of *courage* is the fear of death, especially death in a *noble cause*. But the principle extends: courage is facing what is frightening for the sake of what is noble."
+            "Some fears are appropriate and even admirable. A good person fears *disgrace*, and rightly so. *Not to fear disgrace would make you shameless*, not courageous.",
+            "The greatest test of courage is the fear of death, especially death in a *noble cause*. But the principle extends: *courage is facing what is frightening for the sake of what is noble*."
         ],
         choices: [
             { text: "What about everyday courage?", next: 'daily' }
@@ -797,8 +797,8 @@ courage: {
     },
     good_fear: {
         text: [
-            "Very much so. Fear of *disgrace* is not just acceptable \u2014 it is admirable. It shows you care about what matters. And some dangers genuinely should be feared. The person who fears nothing at all has no judgment.",
-            "*Courage* is not about eliminating fear but about acting well despite it."
+            "Very much so. Fear of *disgrace* is not just acceptable \u2014 it is admirable. It shows you care about what matters. And some dangers genuinely should be feared. *The person who fears nothing at all has no judgment.*",
+            "Courage is not about eliminating fear but about *acting well despite it*."
         ],
         choices: [
             { text: "What does courage look like in practice?", next: 'daily' }
@@ -1258,8 +1258,8 @@ magnanimity: {
 justice: {
     q_equality: {
         text: [
-            "In a sense, but not simple equality. I distinguish two kinds. *Distributive justice* divides goods proportionally \u2014 according to merit, not equally. The person who contributes more to a partnership deserves a greater share.",
-            "*Corrective justice*, on the other hand, treats people as equals regardless of status \u2014 if you wrong someone, the harm must be corrected whether you are rich or poor."
+            "In a sense, but not simple equality. I distinguish two kinds. *Distributive justice divides goods proportionally* \u2014 according to merit, not equally. The person who contributes more to a partnership deserves a greater share.",
+            "Corrective justice, on the other hand, treats people as equals regardless of status \u2014 if you wrong someone, the harm must be corrected whether you are rich or poor."
         ],
         choices: [
             { text: "Why not equal shares for everyone?", next: 'why_not_equal' },

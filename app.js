@@ -344,7 +344,7 @@ $('nextChapterBtn').addEventListener('click', () => {
 });
 
 // ═══════════════════════════════════════════════════════════
-// LEARN MODE (Topic-based Socratic Dialogue)
+// LEARN MODE (Topic-based Dialogue)
 // ═══════════════════════════════════════════════════════════
 
 function startDialogue(topicId, startNode) {
