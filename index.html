@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Nicomachean Ethics — A Socratic Journey</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x0391;</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #FAF8F5;
+            --bg-alt: #F0EBE4;
+            --text: #1B1918;
+            --text-secondary: #7A716A;
+            --text-tertiary: #A99E94;
+            --accent: #A0522D;
+            --accent-hover: #8B4726;
+            --accent-light: rgba(160, 82, 45, 0.08);
+            --accent-glow: rgba(160, 82, 45, 0.25);
+            --border: #E5DED5;
+            --card: #FFFFFF;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-lg: 0 4px 20px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.03);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --transition: 200ms ease;
+            --transition-slow: 400ms ease;
+            --highlight: rgba(160, 82, 45, 0.12);
+        }
+
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 3px; background: var(--border); z-index: 100;
+        }
+        .progress-fill {
+            height: 100%; background: var(--accent);
+            width: 0%; transition: width 800ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Screens */
+        .screen {
+            min-height: 100vh; display: flex;
+            align-items: center; justify-content: center;
+            padding: 2rem; flex-direction: column;
+        }
+        .screen.hidden { display: none; }
+
+        /* Intro screen */
+        .intro-content { text-align: center; max-width: 540px; }
+        .intro-decoration {
+            font-family: var(--font-serif); font-size: 4.5rem;
+            color: var(--accent); margin-bottom: 1rem; font-weight: 400;
+            opacity: 0; animation: fadeInDown 800ms ease forwards;
+        }
+        .intro-title {
+            font-family: var(--font-serif); font-size: 2.8rem;
+            font-weight: 500; letter-spacing: -0.02em;
+            margin-bottom: 0.25rem; color: var(--text);
+            opacity: 0; animation: fadeInUp 800ms ease 200ms forwards;
+        }
+        .intro-subtitle {
+            font-family: var(--font-serif); font-size: 1.2rem;
+            color: var(--text-secondary); font-style: italic;
+            margin-bottom: 2rem;
+            opacity: 0; animation: fadeInUp 800ms ease 400ms forwards;
+        }
+        .intro-description {
+            color: var(--text-secondary); font-size: 0.9375rem;
+            line-height: 1.7; margin-bottom: 2.5rem;
+            opacity: 0; animation: fadeInUp 800ms ease 600ms forwards;
+        }
+        .intro-btn-wrap {
+            opacity: 0; animation: fadeInUp 800ms ease 800ms forwards;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            font-family: var(--font-sans); font-size: 0.9375rem; font-weight: 500;
+            background: var(--accent); color: white; border: none;
+            padding: 0.75rem 2rem; border-radius: var(--radius-sm);
+            cursor: pointer; transition: all var(--transition);
+            letter-spacing: 0.01em;
+        }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px); box-shadow: var(--shadow-md);
+        }
+        .btn-primary:active { transform: translateY(0); }
+
+        .btn-outline {
+            font-family: var(--font-sans); font-size: 0.8125rem; font-weight: 500;
+            background: transparent; color: var(--text-secondary);
+            border: 1px solid var(--border); padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm); cursor: pointer;
+            transition: all var(--transition); display: inline-flex;
+            align-items: center; gap: 0.375rem;
+        }
+        .btn-outline:hover { border-color: var(--text-tertiary); color: var(--text); }
+        .btn-outline svg { width: 16px; height: 16px; }
+
+        .btn-ghost {
+            font-family: var(--font-sans); font-size: 0.8125rem; font-weight: 500;
+            background: transparent; color: var(--text-secondary);
+            border: none; padding: 0.375rem 0.75rem;
+            border-radius: var(--radius-sm); cursor: pointer;
+            transition: all var(--transition);
+        }
+        .btn-ghost:hover { color: var(--accent); }
+
+        /* ─── Mode Switcher ─── */
+        .mode-switcher {
+            display: flex; gap: 0.25rem; padding: 0.25rem;
+            background: var(--bg-alt); border-radius: var(--radius-sm);
+            margin-bottom: 2rem; align-self: center;
+        }
+        .mode-btn {
+            font-family: var(--font-sans); font-size: 0.8125rem; font-weight: 500;
+            padding: 0.5rem 1.25rem; border-radius: 6px;
+            border: none; cursor: pointer; background: transparent;
+            color: var(--text-secondary); transition: all var(--transition);
+        }
+        .mode-btn.active {
+            background: var(--card); color: var(--text);
+            box-shadow: var(--shadow-sm);
+        }
+        .mode-btn:hover:not(.active) { color: var(--text); }
+
+        /* ─── Hub screen ─── */
+        .hub-content { max-width: 640px; width: 100%; }
+        .hub-header { text-align: center; margin-bottom: 1.5rem; }
+        .hub-header h1 {
+            font-family: var(--font-serif); font-size: 2.2rem;
+            font-weight: 500; margin-bottom: 0.25rem;
+        }
+        .hub-header p { color: var(--text-secondary); font-size: 0.9375rem; }
+        .hub-progress {
+            text-align: center; margin-bottom: 2rem;
+            font-size: 0.8125rem; color: var(--text-tertiary);
+        }
+        .hub-progress span { color: var(--accent); font-weight: 600; }
+
+        .book-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .book-item {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1rem 1.25rem; border-radius: var(--radius-md);
+            background: var(--card); border: 1px solid var(--border);
+            cursor: pointer; transition: all var(--transition);
+        }
+        .book-item:hover {
+            border-color: var(--accent); box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+        .book-item.completed { border-color: var(--accent-light); }
+        .book-item.completed .book-numeral { background: var(--accent); color: white; }
+
+        .book-numeral {
+            font-family: var(--font-serif); font-size: 0.875rem; font-weight: 600;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--bg-alt); color: var(--text-secondary);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: all var(--transition);
+        }
+        .book-info { flex: 1; min-width: 0; }
+        .book-title {
+            font-family: var(--font-serif); font-size: 1.0625rem;
+            font-weight: 500; margin-bottom: 0.125rem;
+        }
+        .book-desc {
+            font-size: 0.8125rem; color: var(--text-secondary);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .book-status {
+            font-size: 0.75rem; color: var(--text-tertiary);
+            flex-shrink: 0; display: flex; align-items: center; gap: 0.25rem;
+        }
+        .book-status .check { color: var(--accent); }
+
+        /* ─── Dialogue screen (Instruction mode) ─── */
+        #dialogueScreen { padding-top: 4rem; align-items: flex-start; }
+        .dialogue-header {
+            position: fixed; top: 3px; left: 0; right: 0;
+            background: rgba(250, 248, 245, 0.92); backdrop-filter: blur(12px);
+            padding: 0.75rem 1.5rem; display: flex;
+            align-items: center; justify-content: space-between;
+            z-index: 50; border-bottom: 1px solid var(--border);
+        }
+        .dialogue-header-left { display: flex; align-items: center; gap: 0.75rem; }
+        .dialogue-header-title {
+            font-family: var(--font-serif); font-size: 1rem;
+            font-weight: 500; color: var(--text-secondary);
+        }
+        .dialogue-header-right { display: flex; gap: 0.5rem; }
+
+        .dialogue-area {
+            width: 100%; max-width: 660px; margin: 0 auto;
+            padding: 2rem 0 4rem;
+        }
+
+        .dialogue-card {
+            transition: opacity 400ms ease, transform 400ms ease;
+        }
+        .dialogue-card.exiting { opacity: 0; transform: translateY(8px); }
+        .dialogue-card.entering { opacity: 0; transform: translateY(-12px); }
+
+        .speaker {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--accent-light); color: var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-serif); font-size: 1.25rem; font-weight: 500;
+        }
+        .speaker-name {
+            font-family: var(--font-serif); font-size: 1rem;
+            font-weight: 500; color: var(--text-secondary);
+        }
+
+        .dialogue-text { margin-bottom: 1.5rem; }
+        .dialogue-text p {
+            font-family: var(--font-serif); font-size: 1.1875rem;
+            line-height: 1.75; color: var(--text); margin-bottom: 1rem;
+        }
+        .dialogue-text p:last-child { margin-bottom: 0; }
+
+        .typing-cursor::after {
+            content: '|'; animation: blink 800ms step-end infinite;
+            color: var(--accent); margin-left: 1px;
+        }
+
+        .skip-hint {
+            text-align: center; font-size: 0.75rem;
+            color: var(--text-tertiary); margin-top: 0.75rem;
+            opacity: 0; transition: opacity 300ms ease;
+        }
+        .skip-hint.visible { opacity: 1; }
+
+        /* Choices */
+        .choices { display: flex; flex-direction: column; gap: 0.625rem; }
+        .choice-btn {
+            font-family: var(--font-sans); font-size: 0.9375rem;
+            text-align: left; padding: 0.875rem 1.25rem;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--radius-md); cursor: pointer;
+            transition: all var(--transition); color: var(--text);
+            opacity: 0; transform: translateY(8px);
+        }
+        .choice-btn.visible {
+            opacity: 1; transform: translateY(0);
+            transition: opacity 400ms ease, transform 400ms ease, border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+        }
+        .choice-btn:hover:not(:disabled) {
+            border-color: var(--accent); background: var(--accent-light);
+        }
+        .choice-btn:disabled { cursor: default; }
+        .choice-btn.selected {
+            border-color: var(--accent); background: var(--accent-light);
+            color: var(--accent); font-weight: 500;
+        }
+        .choice-btn.dimmed { opacity: 0.3; }
+
+        /* ─── Navigation mode (Reader) ─── */
+        #readerScreen { padding-top: 4rem; align-items: flex-start; }
+        .reader-header {
+            position: fixed; top: 3px; left: 0; right: 0;
+            background: rgba(250, 248, 245, 0.92); backdrop-filter: blur(12px);
+            padding: 0.75rem 1.5rem; display: flex;
+            align-items: center; justify-content: space-between;
+            z-index: 50; border-bottom: 1px solid var(--border);
+        }
+        .reader-header-left { display: flex; align-items: center; gap: 0.75rem; }
+        .reader-header-title {
+            font-family: var(--font-serif); font-size: 1rem;
+            font-weight: 500; color: var(--text-secondary);
+        }
+        .reader-header-right { display: flex; gap: 0.5rem; align-items: center; }
+
+        .reader-area {
+            width: 100%; max-width: 700px; margin: 0 auto;
+            padding: 2rem 0 4rem;
+        }
+
+        /* Chapter navigation */
+        .chapter-nav {
+            display: flex; gap: 0.375rem; flex-wrap: wrap;
+            margin-bottom: 2rem; padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .chapter-pill {
+            font-family: var(--font-sans); font-size: 0.75rem; font-weight: 500;
+            padding: 0.3rem 0.6rem; border-radius: 20px;
+            border: 1px solid var(--border); background: var(--card);
+            cursor: pointer; transition: all var(--transition);
+            color: var(--text-secondary);
+        }
+        .chapter-pill:hover { border-color: var(--accent); color: var(--accent); }
+        .chapter-pill.active {
+            background: var(--accent); color: white;
+            border-color: var(--accent);
+        }
+
+        /* Text display */
+        .reader-chapter-title {
+            font-family: var(--font-serif); font-size: 1.5rem;
+            font-weight: 500; color: var(--text); margin-bottom: 1.5rem;
+        }
+        .reader-paragraph {
+            font-family: var(--font-serif); font-size: 1.125rem;
+            line-height: 1.85; color: var(--text); margin-bottom: 1.25rem;
+            padding: 0.5rem 0.75rem; border-radius: var(--radius-sm);
+            border-left: 3px solid transparent;
+            transition: all 400ms ease;
+        }
+        .reader-paragraph.highlighted {
+            background: var(--highlight);
+            border-left-color: var(--accent);
+        }
+        .reader-paragraph mark {
+            background: rgba(160, 82, 45, 0.2);
+            color: inherit; border-radius: 2px;
+            padding: 0 2px;
+        }
+
+        /* Search bar in reader */
+        .reader-search {
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .reader-search-input {
+            font-family: var(--font-sans); font-size: 0.8125rem;
+            padding: 0.4rem 0.75rem; border: 1px solid var(--border);
+            border-radius: var(--radius-sm); background: var(--card);
+            color: var(--text); width: 200px; outline: none;
+            transition: border-color var(--transition);
+        }
+        .reader-search-input:focus { border-color: var(--accent); }
+        .reader-search-input::placeholder { color: var(--text-tertiary); }
+        .search-count {
+            font-size: 0.75rem; color: var(--text-tertiary);
+            white-space: nowrap;
+        }
+        .search-nav-btn {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 1px solid var(--border); background: var(--card);
+            cursor: pointer; font-size: 0.75rem; color: var(--text-secondary);
+            display: flex; align-items: center; justify-content: center;
+            transition: all var(--transition);
+        }
+        .search-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* Prev/Next chapter buttons */
+        .reader-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 2rem; border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+        .reader-footer .btn-outline { min-width: 120px; justify-content: center; }
+
+        /* ─── Sidebar ─── */
+        .sidebar {
+            position: fixed; top: 0; right: 0;
+            width: 340px; height: 100vh;
+            background: var(--card);
+            box-shadow: -4px 0 24px rgba(0,0,0,0.08);
+            transform: translateX(100%);
+            transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 60; display: flex; flex-direction: column;
+        }
+        .sidebar.open { transform: translateX(0); }
+        .sidebar-header {
+            padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .sidebar-header h3 {
+            font-family: var(--font-serif); font-size: 1.125rem; font-weight: 500;
+        }
+        .btn-close {
+            width: 32px; height: 32px; border-radius: 50%;
+            border: none; background: var(--bg-alt); cursor: pointer;
+            font-size: 1.125rem; color: var(--text-secondary);
+            display: flex; align-items: center; justify-content: center;
+            transition: all var(--transition);
+        }
+        .btn-close:hover { background: var(--border); color: var(--text); }
+        .sidebar-body { flex: 1; overflow-y: auto; padding: 1.5rem; }
+
+        .overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.15);
+            opacity: 0; pointer-events: none;
+            transition: opacity 300ms ease; z-index: 55;
+        }
+        .overlay.visible { opacity: 1; pointer-events: auto; }
+
+        /* Concept map */
+        .concept-map-svg { width: 100%; }
+        .concept-node circle {
+            fill: var(--bg-alt); stroke: var(--border); stroke-width: 2;
+            transition: all 600ms ease;
+        }
+        .concept-node.unlocked circle {
+            fill: var(--accent); stroke: var(--accent);
+        }
+        .concept-node text {
+            font-family: var(--font-sans); font-size: 10px;
+            fill: var(--text-tertiary); transition: fill 600ms ease;
+        }
+        .concept-node.unlocked text { fill: var(--text); }
+        .concept-edge {
+            stroke: var(--border); stroke-width: 1.5;
+            transition: stroke 600ms ease;
+        }
+        .concept-edge.active { stroke: var(--accent); }
+        .concept-book-label {
+            font-family: var(--font-serif); font-size: 11px;
+            fill: var(--text-secondary); font-weight: 600;
+        }
+
+        /* End screen */
+        .end-content { max-width: 580px; text-align: center; }
+        .end-quote {
+            font-family: var(--font-serif); font-size: 1.0625rem;
+            font-style: italic; color: var(--text-secondary);
+            border-left: 3px solid var(--accent); padding-left: 1.25rem;
+            text-align: left; margin-bottom: 2.5rem; line-height: 1.7;
+        }
+        .end-quote cite {
+            display: block; margin-top: 0.5rem;
+            font-style: normal; font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Summary list */
+        .summary-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 2rem;
+            margin: 1.5rem 0; text-align: left;
+        }
+        .summary-card h3 {
+            font-family: var(--font-serif); font-size: 1.25rem;
+            font-weight: 500; margin-bottom: 1rem; color: var(--accent);
+        }
+        .summary-card ol { list-style: none; counter-reset: summary; }
+        .summary-card li {
+            counter-increment: summary; padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9375rem; line-height: 1.6;
+            display: flex; gap: 0.75rem;
+        }
+        .summary-card li:last-child { border-bottom: none; }
+        .summary-card li::before {
+            content: counter(summary);
+            color: var(--accent); font-weight: 600; font-size: 0.875rem;
+            flex-shrink: 0; width: 1.25rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes pulse {
+            0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+            50% { filter: drop-shadow(0 0 6px var(--accent-glow)); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .screen { padding: 1.25rem; }
+            .intro-title { font-size: 2.2rem; }
+            .hub-content { padding: 0 0.25rem; }
+            .dialogue-area { padding: 1rem 0 3rem; }
+            .dialogue-text p { font-size: 1.0625rem; }
+            .reader-area { padding: 1rem 0 3rem; }
+            .reader-paragraph { font-size: 1rem; }
+            .sidebar { width: 100%; }
+            .book-item { padding: 0.875rem 1rem; }
+            .reader-search-input { width: 140px; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+    </style>
+</head>
+<body>
+    <!-- Progress bar -->
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+    <!-- Intro screen -->
+    <div class="screen" id="introScreen">
+        <div class="intro-content">
+            <div class="intro-decoration">&#913;</div>
+            <h1 class="intro-title">Nicomachean Ethics</h1>
+            <p class="intro-subtitle">A Socratic Journey with Aristotle</p>
+            <p class="intro-description">
+                Explore Aristotle's most influential work on ethics and the good life.
+                Read the original text with guided navigation, or learn through
+                interactive Socratic dialogue across ten books of practical wisdom.
+            </p>
+            <div class="intro-btn-wrap">
+                <button class="btn-primary" id="beginBtn">Begin the Journey</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hub screen (book selection) -->
+    <div class="screen hidden" id="hubScreen">
+        <div class="hub-content">
+            <div class="hub-header">
+                <h1>The Nicomachean Ethics</h1>
+                <p id="hubSubtitle">Choose a book to explore</p>
+            </div>
+            <!-- Mode switcher -->
+            <div class="mode-switcher" id="modeSwitcher">
+                <button class="mode-btn active" data-mode="navigation" id="modeNavBtn">Read</button>
+                <button class="mode-btn" data-mode="instruction" id="modeInsBtn">Learn</button>
+            </div>
+            <div class="hub-progress" id="hubProgress" style="display:none">
+                <span id="completedCount">0</span> of 10 books completed
+            </div>
+            <div class="book-list" id="bookList"></div>
+        </div>
+    </div>
+
+    <!-- Reader screen (Navigation mode) -->
+    <div class="screen hidden" id="readerScreen">
+        <header class="reader-header">
+            <div class="reader-header-left">
+                <button class="btn-ghost" id="readerBackBtn">&larr; Books</button>
+                <span class="reader-header-title" id="readerHeaderTitle"></span>
+            </div>
+            <div class="reader-header-right">
+                <div class="reader-search">
+                    <input type="text" class="reader-search-input" id="readerSearchInput" placeholder="Search text...">
+                    <span class="search-count" id="searchCount"></span>
+                    <button class="search-nav-btn" id="searchPrevBtn" title="Previous match">&uarr;</button>
+                    <button class="search-nav-btn" id="searchNextBtn" title="Next match">&darr;</button>
+                </div>
+            </div>
+        </header>
+        <div class="reader-area" id="readerArea">
+            <div class="chapter-nav" id="chapterNav"></div>
+            <h2 class="reader-chapter-title" id="readerChapterTitle"></h2>
+            <div id="readerContent"></div>
+            <div class="reader-footer" id="readerFooter">
+                <button class="btn-outline" id="prevChapterBtn">&larr; Previous</button>
+                <button class="btn-outline" id="nextChapterBtn">Next &rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dialogue screen (Instruction mode) -->
+    <div class="screen hidden" id="dialogueScreen">
+        <header class="dialogue-header">
+            <div class="dialogue-header-left">
+                <button class="btn-ghost" id="backBtn">&larr; Books</button>
+                <span class="dialogue-header-title" id="dialogueHeaderTitle"></span>
+            </div>
+            <div class="dialogue-header-right">
+                <button class="btn-outline" id="mapBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                    Map
+                </button>
+            </div>
+        </header>
+        <div class="dialogue-area">
+            <div class="dialogue-card" id="dialogueCard">
+                <div class="speaker">
+                    <div class="avatar">&#913;</div>
+                    <span class="speaker-name">Aristotle</span>
+                </div>
+                <div class="dialogue-text" id="dialogueText"></div>
+                <div class="skip-hint" id="skipHint">Click anywhere to skip</div>
+                <div class="choices" id="choicesContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Book completion screen -->
+    <div class="screen hidden" id="endScreen">
+        <div class="end-content" id="endContent"></div>
+    </div>
+
+    <!-- Concept map sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Concept Map</h3>
+            <button class="btn-close" id="closeMapBtn">&times;</button>
+        </div>
+        <div class="sidebar-body">
+            <svg id="conceptMapSvg" class="concept-map-svg" viewBox="0 0 300 820"></svg>
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Attribution footer -->
+    <footer style="
+        text-align: center; padding: 1.5rem 2rem; font-size: 0.75rem;
+        color: var(--text-tertiary); line-height: 1.6;
+        border-top: 1px solid var(--border); margin-top: auto;
+    ">
+        Text from <a href="https://www.gutenberg.org/ebooks/8438" target="_blank" rel="noopener"
+            style="color: var(--text-secondary); text-decoration: underline;">Project Gutenberg</a>.
+        Translation by D. P. Chase (1847, rev. 1861). Introduction by J. A. Smith.
+        Public domain.
+    </footer>
+
+    <!-- Data scripts -->
+    <script src="source-data.js"></script>
+    <script src="dialogues.js"></script>
+
+    <!-- App logic -->
+    <script src="app.js"></script>
+</body>
+</html>
