@@ -1615,56 +1615,6 @@ politics: {
 
 };
 
-// ─── Concept Map Data (kept for sidebar) ─────────────────
-const conceptMapNodes = [
-    { id: 'b1', label: 'Book I', x: 150, y: 30, isBook: true, book: 1 },
-    { id: 'b1_teleology', label: 'Teleology', x: 60, y: 60, book: 1 },
-    { id: 'b1_eudaimonia', label: 'Eudaimonia', x: 150, y: 70, book: 1 },
-    { id: 'b1_function', label: 'Function', x: 240, y: 60, book: 1 },
-    { id: 'b2', label: 'Book II', x: 150, y: 115, isBook: true, book: 2 },
-    { id: 'b2_habit', label: 'Habituation', x: 60, y: 145, book: 2 },
-    { id: 'b2_mean', label: 'The Mean', x: 240, y: 145, book: 2 },
-    { id: 'b3', label: 'Book III', x: 150, y: 195, isBook: true, book: 3 },
-    { id: 'b3_choice', label: 'Choice', x: 60, y: 225, book: 3 },
-    { id: 'b3_courage', label: 'Courage', x: 240, y: 225, book: 3 },
-    { id: 'b4', label: 'Book IV', x: 150, y: 275, isBook: true, book: 4 },
-    { id: 'b4_generosity', label: 'Generosity', x: 60, y: 305, book: 4 },
-    { id: 'b4_magnanimity', label: 'Magnanimity', x: 240, y: 305, book: 4 },
-    { id: 'b5', label: 'Book V', x: 150, y: 355, isBook: true, book: 5 },
-    { id: 'b5_distributive', label: 'Distribution', x: 60, y: 385, book: 5 },
-    { id: 'b5_corrective', label: 'Correction', x: 240, y: 385, book: 5 },
-    { id: 'b6', label: 'Book VI', x: 150, y: 435, isBook: true, book: 6 },
-    { id: 'b6_phronesis', label: 'Phronesis', x: 70, y: 465, book: 6 },
-    { id: 'b6_sophia', label: 'Sophia', x: 230, y: 465, book: 6 },
-    { id: 'b7', label: 'Book VII', x: 150, y: 515, isBook: true, book: 7 },
-    { id: 'b7_akrasia', label: 'Akrasia', x: 60, y: 545, book: 7 },
-    { id: 'b7_pleasure', label: 'Pleasure', x: 240, y: 545, book: 7 },
-    { id: 'b8', label: 'Book VIII', x: 150, y: 595, isBook: true, book: 8 },
-    { id: 'b8_types', label: 'Three Types', x: 60, y: 625, book: 8 },
-    { id: 'b8_perfect', label: 'Perfect Philia', x: 240, y: 625, book: 8 },
-    { id: 'b9', label: 'Book IX', x: 150, y: 675, isBook: true, book: 9 },
-    { id: 'b9_selflove', label: 'Self-Love', x: 60, y: 705, book: 9 },
-    { id: 'b9_need', label: 'Need Friends', x: 240, y: 705, book: 9 },
-    { id: 'b10', label: 'Book X', x: 150, y: 755, isBook: true, book: 10 },
-    { id: 'b10_contemplation', label: 'Theoria', x: 60, y: 790, book: 10 },
-    { id: 'b10_politics', label: 'Politics', x: 240, y: 790, book: 10 },
-];
-
-const conceptMapEdges = [
-    ['b1', 'b2'], ['b2', 'b3'], ['b3', 'b4'], ['b4', 'b5'],
-    ['b5', 'b6'], ['b6', 'b7'], ['b7', 'b8'], ['b8', 'b9'], ['b9', 'b10'],
-    ['b1', 'b1_teleology'], ['b1', 'b1_eudaimonia'], ['b1', 'b1_function'],
-    ['b2', 'b2_habit'], ['b2', 'b2_mean'],
-    ['b3', 'b3_choice'], ['b3', 'b3_courage'],
-    ['b4', 'b4_generosity'], ['b4', 'b4_magnanimity'],
-    ['b5', 'b5_distributive'], ['b5', 'b5_corrective'],
-    ['b6', 'b6_phronesis'], ['b6', 'b6_sophia'],
-    ['b7', 'b7_akrasia'], ['b7', 'b7_pleasure'],
-    ['b8', 'b8_types'], ['b8', 'b8_perfect'],
-    ['b9', 'b9_selflove'], ['b9', 'b9_need'],
-    ['b10', 'b10_contemplation'], ['b10', 'b10_politics'],
-];
-
 // ─── Book metadata (for Read mode) ──────────────────────
 const books = [
     { id: 1, numeral: 'I', title: 'The Good for Man', desc: 'Happiness, the highest good, and the function argument' },

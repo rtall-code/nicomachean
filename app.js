@@ -3,7 +3,6 @@ let currentMode = 'navigation'; // 'navigation' or 'instruction'
 let currentTopic = null;        // topic id for Learn mode
 let currentNode = null;
 let completedTopics = new Set();
-let unlockedConcepts = new Set();
 let isTyping = false;
 let skipTyping = false;
 let displayedTopicIds = [];     // currently shown 4 topic ids
@@ -27,9 +26,7 @@ const choicesContainer = $('choicesContainer');
 const progressFill = $('progressFill');
 const dialogueHeaderTitle = $('dialogueHeaderTitle');
 const skipHint = $('skipHint');
-const sidebar = $('sidebar');
 const overlay = $('overlay');
-const conceptMapSvg = $('conceptMapSvg');
 
 // Reader DOM
 const readerHeaderTitle = $('readerHeaderTitle');
@@ -57,7 +54,6 @@ function loadState() {
         if (saved) {
             const data = JSON.parse(saved);
             completedTopics = new Set(data.completedTopics || []);
-            unlockedConcepts = new Set(data.unlockedConcepts || []);
             if (data.currentMode) currentMode = data.currentMode;
         }
     } catch(e) {}
@@ -67,7 +63,6 @@ function saveState() {
     try {
         localStorage.setItem('nicomachean_state_v2', JSON.stringify({
             completedTopics: [...completedTopics],
-            unlockedConcepts: [...unlockedConcepts],
             currentMode
         }));
     } catch(e) {}
@@ -361,7 +356,8 @@ function startDialogue(topicId, startNode) {
     requestAnimationFrame(() => {
         card.classList.remove('entering');
     });
-    renderNode(startNode);
+    // Wait for fade-in transition before typing
+    setTimeout(() => renderNode(startNode), 450);
 }
 
 async function renderNode(nodeId) {
@@ -410,10 +406,10 @@ async function typeText(element, text) {
             break;
         }
         element.textContent += text[i];
-        let delay = 18 + Math.random() * 8;
-        if ('.!?'.includes(text[i]) && i < text.length - 1) delay += 120;
-        else if (',;:'.includes(text[i])) delay += 60;
-        else if (text[i] === '\u2014') delay += 80;
+        let delay = 12 + Math.random() * 6;
+        if ('.!?'.includes(text[i]) && i < text.length - 1) delay += 84;
+        else if (',;:'.includes(text[i])) delay += 42;
+        else if (text[i] === '\u2014') delay += 56;
         await sleep(delay);
     }
     element.classList.remove('typing-cursor');
@@ -474,10 +470,6 @@ function showTopicEnd(node) {
     const btns = `
         <div style="display: flex; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap;">
             <button class="btn-primary" onclick="setMode('instruction')">Back to Topics</button>
-            <button class="btn-outline" onclick="toggleSidebar()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-                Concept Map
-            </button>
             <button class="btn-ghost" onclick="openTopicQuestions(currentTopic)">Try Another Question</button>
         </div>
     `;
@@ -494,76 +486,11 @@ function showTopicEnd(node) {
     });
 }
 
-// ─── Concept Map ─────────────────────────────────────────
-function buildConceptMap() {
-    const svg = conceptMapSvg;
-    svg.innerHTML = '';
-
-    conceptMapEdges.forEach(([fromId, toId]) => {
-        const from = conceptMapNodes.find(n => n.id === fromId);
-        const to = conceptMapNodes.find(n => n.id === toId);
-        if (!from || !to) return;
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', from.x);
-        line.setAttribute('y1', from.y);
-        line.setAttribute('x2', to.x);
-        line.setAttribute('y2', to.y);
-        line.setAttribute('class', 'concept-edge');
-        line.id = `edge-${fromId}-${toId}`;
-        svg.appendChild(line);
-    });
-
-    conceptMapNodes.forEach(node => {
-        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        g.setAttribute('class', 'concept-node');
-        g.id = `concept-${node.id}`;
-
-        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('cx', node.x);
-        circle.setAttribute('cy', node.y);
-        circle.setAttribute('r', node.isBook ? 14 : 8);
-        g.appendChild(circle);
-
-        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        text.setAttribute('x', node.x);
-        text.setAttribute('y', node.y + (node.isBook ? 28 : 20));
-        text.setAttribute('text-anchor', 'middle');
-        if (node.isBook) text.setAttribute('class', 'concept-book-label');
-        text.textContent = node.label;
-        g.appendChild(text);
-
-        svg.appendChild(g);
-    });
-
-    updateConceptMap();
-}
-
-function updateConceptMap() {
-    conceptMapNodes.forEach(node => {
-        const el = document.getElementById(`concept-${node.id}`);
-        if (!el) return;
-        el.classList.toggle('unlocked', unlockedConcepts.has(node.id));
-    });
-
-    conceptMapEdges.forEach(([fromId, toId]) => {
-        const el = document.getElementById(`edge-${fromId}-${toId}`);
-        if (!el) return;
-        el.classList.toggle('active', unlockedConcepts.has(fromId) && unlockedConcepts.has(toId));
-    });
-}
-
-function toggleSidebar() {
-    sidebar.classList.toggle('open');
-    overlay.classList.toggle('visible');
-}
 
 // ─── Event Listeners ─────────────────────────────────────
 $('beginBtn').addEventListener('click', () => setMode(currentMode));
 $('backBtn').addEventListener('click', () => setMode('instruction'));
 $('questionBackBtn').addEventListener('click', () => setMode('instruction'));
-$('mapBtn').addEventListener('click', toggleSidebar);
-$('closeMapBtn').addEventListener('click', toggleSidebar);
-$('overlay').addEventListener('click', toggleSidebar);
 $('shuffleBtn').addEventListener('click', shuffleTopics);
 
 // Mode switcher
@@ -592,7 +519,6 @@ document.addEventListener('keydown', (e) => {
 
 // ─── Init ────────────────────────────────────────────────
 loadState();
-buildConceptMap();
 updateProgress();
 
 // Set mode button UI without navigating
