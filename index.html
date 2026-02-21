@@ -12,20 +12,20 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg: #FAF8F5;
-            --bg-alt: #F0EBE4;
-            --text: #1B1918;
-            --text-secondary: #7A716A;
-            --text-tertiary: #A99E94;
-            --accent: #A0522D;
-            --accent-hover: #8B4726;
-            --accent-light: rgba(160, 82, 45, 0.08);
-            --accent-glow: rgba(160, 82, 45, 0.25);
-            --border: #E5DED5;
-            --card: #FFFFFF;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-md: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-lg: 0 4px 20px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.03);
+            --bg: #F5F5F3;
+            --bg-alt: #E8E8E4;
+            --text: #2D2D2D;
+            --text-secondary: #6B6B65;
+            --text-tertiary: #9A9A92;
+            --accent: #8B5E3C;
+            --accent-hover: #744E30;
+            --accent-light: rgba(139, 94, 60, 0.08);
+            --accent-glow: rgba(139, 94, 60, 0.25);
+            --border: #D8D8D2;
+            --card: #FEFEFE;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 2px 8px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-lg: 0 4px 20px rgba(0,0,0,0.09), 0 2px 4px rgba(0,0,0,0.04);
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 16px;
@@ -33,7 +33,7 @@
             --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
             --transition: 200ms ease;
             --transition-slow: 400ms ease;
-            --highlight: rgba(160, 82, 45, 0.12);
+            --highlight: rgba(139, 94, 60, 0.12);
         }
 
         html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -199,7 +199,7 @@
         #dialogueScreen { padding-top: 4rem; align-items: flex-start; }
         .dialogue-header {
             position: fixed; top: 3px; left: 0; right: 0;
-            background: rgba(250, 248, 245, 0.92); backdrop-filter: blur(12px);
+            background: rgba(245, 245, 243, 0.92); backdrop-filter: blur(12px);
             padding: 0.75rem 1.5rem; display: flex;
             align-items: center; justify-content: space-between;
             z-index: 50; border-bottom: 1px solid var(--border);
@@ -245,13 +245,13 @@
         .dialogue-text p:last-child { margin-bottom: 0; }
 
         .term-hl {
-            background: rgba(160,82,45,0.15);
+            background: rgba(139,94,60,0.15);
             padding: 2px 5px; border-radius: 3px;
             animation: hlFade 600ms ease both;
         }
         @keyframes hlFade {
             from { background: transparent; }
-            to { background: rgba(160,82,45,0.15); }
+            to { background: rgba(139,94,60,0.15); }
         }
 
         .typing-cursor::after {
@@ -294,7 +294,7 @@
         #readerScreen { padding-top: 4rem; align-items: flex-start; }
         .reader-header {
             position: fixed; top: 3px; left: 0; right: 0;
-            background: rgba(250, 248, 245, 0.92); backdrop-filter: blur(12px);
+            background: rgba(245, 245, 243, 0.92); backdrop-filter: blur(12px);
             padding: 0.75rem 1.5rem; display: flex;
             align-items: center; justify-content: space-between;
             z-index: 50; border-bottom: 1px solid var(--border);
@@ -347,7 +347,7 @@
             border-left-color: var(--accent);
         }
         .reader-paragraph mark {
-            background: rgba(160, 82, 45, 0.2);
+            background: rgba(139, 94, 60, 0.2);
             color: inherit; border-radius: 3px;
             padding: 2px 5px;
         }
@@ -433,7 +433,7 @@
         #questionScreen { padding-top: 4rem; }
         .question-header {
             position: fixed; top: 3px; left: 0; right: 0;
-            background: rgba(250, 248, 245, 0.92); backdrop-filter: blur(12px);
+            background: rgba(245, 245, 243, 0.92); backdrop-filter: blur(12px);
             padding: 0.75rem 1.5rem; display: flex;
             align-items: center; z-index: 50;
             border-bottom: 1px solid var(--border);
