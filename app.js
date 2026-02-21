@@ -626,7 +626,4 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === currentMode);
 });
 
-// If already visited, skip intro
-if (completedTopics.size > 0) {
-    setMode(currentMode);
-}
+// Always start from the homepage
